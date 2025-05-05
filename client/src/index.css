@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&display=swap');
+
+@import "tailwindcss";
+
+
+.roboto {
+  font-family: 'Roboto', sans-serif;
+}
+
+
+  .hero-bg {
+    background-image: linear-gradient(
+      310deg,
+      hsl(240deg 100% 1%) 0%,
+      hsl(230deg 60% 2%) 6%,
+      hsl(221deg 60% 4%) 12%,
+      hsl(212deg 63% 5%) 18%,
+      hsl(205deg 68% 5%) 24%,
+      hsl(200deg 75% 6%) 29%,
+      hsl(197deg 86% 6%) 35%,
+      hsl(194deg 98% 6%) 41%,
+      hsl(192deg 100% 7%) 47%,
+      hsl(189deg 100% 7%) 53%,
+      hsl(186deg 100% 7%) 59%,
+      hsl(182deg 100% 7%) 65%,
+      hsl(178deg 100% 7%) 71%,
+      hsl(173deg 100% 8%) 76%,
+      hsl(168deg 100% 8%) 82%,
+      hsl(163deg 100% 9%) 88%,
+      hsl(155deg 83% 10%) 94%,
+      hsl(143deg 60% 12%) 100%
+    );
+  }
