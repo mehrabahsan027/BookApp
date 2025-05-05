@@ -13,10 +13,7 @@ export const BookProvider = ({ children }) => {
 
   const queryClient = useQueryClient();
 
-  // const [books, setBooks] = useState([])
-  // const [curentBook, setCurrentBook] = useState(null)
-  // const [error, setError] = useState(null)
-  // const [loading, setLoading] = useState(false)
+
 
 
 
@@ -64,25 +61,12 @@ export const BookProvider = ({ children }) => {
 
       return data.books;
     },
-    keepPreviousData: true, // Keep previous data while fetching new (for pagination)
+    keepPreviousData: true,
+    
   });
 
 
-  // const fetchSingleBook = useCallback(async (id) => {
-  //   setLoading(true)
-  //   try {
-  //     setError(null)
-  //     const response = await fetch(`http://localhost:3000/books/${id}`)
-  //     const data = await response.json()
-  //     setCurrentBook(data?.book)
-  //     return data?.book
-  //   } catch (error) {
-  //     setError(error?.message)
-  //     throw new Error(error?.message)
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }, [])
+  
 
 
   const updateFilters = useCallback((newFilters) => {
@@ -106,7 +90,7 @@ export const BookProvider = ({ children }) => {
 
   const value = {
     books: fetchBooksQuery.data || [],
-    curentBook: queryClient.getQueryData(["book"]) || null,
+    // curentBook: queryClient.getQueryData(["book"]) || null,
     error: fetchBooksQuery.error?.message || null,
     loading: fetchBooksQuery.isLoading,
     pagination,
