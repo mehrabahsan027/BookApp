@@ -11,10 +11,13 @@ export const BookContext = createContext()
 
 export const BookProvider = ({ children }) => {
 
-  const [books, setBooks] = useState([])
-  const [curentBook, setCurrentBook] = useState(null)
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const queryClient = useQueryClient();
+
+  const [cartItems, setCartItems] = useState([]);
+
+  const [cartNumber, setCartNumber] = useState(0);
+
+
 
 
 
@@ -40,72 +43,61 @@ export const BookProvider = ({ children }) => {
     totalBooks: 0
   });
 
-  const fetchBooks = useCallback(
-    async () => {
-      setLoading(true)
-      try {
-
-        setError(null)
-
-        const params = new URLSearchParams()
-
-        Object.entries(filters).forEach(([key, value]) => {
-          if (value) {
-            params.append(key, value)
-          }
-        })
-
-        console.log(params);
-
-
-
-
-        const response = await fetch(`${baseUrl}/books?${params}`)
-        const data = await response.json()
-        console.log(data);
-
-        setBooks(data?.books)
-
-        setPagination({
-          currentPage: data.currentPage,
-          totalPages: data.totalPages,
-          totalBooks: data.totalBooks
-        });
-
-        console.log(pagination);
-
-
-
-      } catch (error) {
-        setError(error?.message)
-      } finally {
-        setLoading(false)
+  const addToCart = (book) => {
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find(item => item._id === book._id);
+  
+      if (existingItem) {
+        return prevItems.map(item =>
+          item._id === book._id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
       }
-    }, [filters]
+  
+      return [...prevItems, { ...book, quantity: 1 }];
+    });
+  
+    setCartNumber(prev => prev + 1);
+  };
+  
 
-  )
+  const removeFromCart = (id) => {
+    setCartItems((prevItems) => prevItems.filter(item => item._id !== id));
+    setCartNumber(prev => Math.max(0, prev - 1));
+  };
+  
 
 
+ // Fetch books query
+  const fetchBooksQuery = useQuery({
+    queryKey: ["books", filters], // Unique key based on filters
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) {
+          params.append(key, value);
+        }
+      });
 
-  const fetchSingleBook = useCallback(async (id) => {
-    setLoading(true)
-    try {
-      setError(null)
-      const response = await fetch(`http://localhost:3000/books/${id}`)
-      const data = await response.json()
-      setCurrentBook(data?.book)
-      return data?.book
-    } catch (error) {
-      setError(error?.message)
-      throw new Error(error?.message)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+      const response = await fetch(`${baseUrl}/books?${params}`);
+      if (!response.ok) throw new Error("Failed to fetch books");
+      const data = await response.json();
 
-  const clearCurrentBook = useCallback(() => {
-    setCurrentBook(null);
-  }, []);
+      setPagination({
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+        totalBooks: data.totalBooks,
+      });
+
+      return data.books;
+    },
+    keepPreviousData: true, // Keep previous data while fetching new (for pagination)
+  });
+
+
+  
+
 
   const updateFilters = useCallback((newFilters) => {
     setFilters(prev => ({
@@ -127,8 +119,24 @@ export const BookProvider = ({ children }) => {
 
 
   const value = {
-    books, curentBook, error, loading, pagination, fetchBooks, clearCurrentBook, fetchSingleBook, updateFilters, filters
-  }
+    books: fetchBooksQuery.data || [],
+    curentBook: queryClient.getQueryData(["book"]) || null,
+    error: fetchBooksQuery.error?.message || null,
+    loading: fetchBooksQuery.isLoading,
+    pagination,
+    fetchBooks: fetchBooksQuery.refetch,
+   
+    // fetchSingleBook,
+    updateFilters,
+    filters,
+
+    cartItems,
+    cartNumber,
+    addToCart,
+    removeFromCart,
+  };
+
+  console.log(cartNumber);
 
   return (
     <BookContext.Provider value={value}>
@@ -144,3 +152,11 @@ export const useBooks = () => {
   }
   return context
 }
+
+// Export QueryClientProvider wrapper for the app
+export const AppWrapper = ({ children }) => (
+  <QueryClientProvider client={queryClient}>
+    <BookProvider>{children}</BookProvider>
+  </QueryClientProvider>
+);
+

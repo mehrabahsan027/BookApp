@@ -9,6 +9,7 @@ export default function App() {
 
 <AppWrapper>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <BookProvider>
 
 <Navbar />
@@ -22,9 +23,24 @@ export default function App() {
 =======
 
 <BookProvider>
+=======
+
+<BookProvider>
 
 <Navbar />
 
+<main className='min-h-[calc(100vh-100px)] mt-16 roboto'>
+  <Outlet />
+</main>
+
+<footer>footer</footer>
+
+</BookProvider>
+>>>>>>> feature-x
+
+<Navbar />
+
+<<<<<<< HEAD
 <main className='min-h-[calc(100vh-100px)] mt-16 roboto'>
   <Outlet />
 </main>
@@ -37,6 +53,8 @@ export default function App() {
 </AppWrapper>
      
 
+=======
+>>>>>>> feature-x
   
   </AppWrapper> 
       
