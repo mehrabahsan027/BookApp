@@ -7,7 +7,7 @@ const port = process.env.PORT || 3001
 
 
 app.use(cors( {
-  origin: [ "http://localhost:3000","https://book-app-01.netlify.app"]
+  origin: [ "http://localhost:3000","https://book-app-client-pied.vercel.app"]
 }));
 app.use(express.json());
 
