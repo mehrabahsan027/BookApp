@@ -8,56 +8,17 @@ export default function App() {
     <>
 
 <AppWrapper>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<BookProvider>
-
-<Navbar />
-
-<main className='min-h-[calc(100vh-100px)] mt-16 roboto'>
-  <Outlet />
-</main>
-
-<footer>footer</footer>
-
-=======
-
-<BookProvider>
-=======
-
-<BookProvider>
-
-<Navbar />
-
-<main className='min-h-[calc(100vh-100px)] mt-16 roboto'>
-  <Outlet />
-</main>
-
-<footer>footer</footer>
-
-</BookProvider>
->>>>>>> feature-x
-
-<Navbar />
-
-<<<<<<< HEAD
-<main className='min-h-[calc(100vh-100px)] mt-16 roboto'>
-  <Outlet />
-</main>
-
-<footer>footer</footer>
-
->>>>>>> feature-x
-</BookProvider>
-
+  <BookProvider>
+    <Navbar />
+    <main className='min-h-[calc(100vh-100px)] mt-16 roboto'>
+      <Outlet />
+    </main>
+    <footer>footer</footer>
+  </BookProvider>
 </AppWrapper>
      
 
-=======
->>>>>>> feature-x
-  
-  </AppWrapper> 
-      
+
 
     </>
   )
