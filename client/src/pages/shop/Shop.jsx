@@ -68,7 +68,9 @@ export default function Shop() {
         <section className='bg-gray-100 mx-auto min-h-screen flex justify-center items-start'>
 
             {loading ? (
-                <div className="text-2xl font-semibold mt-16">Loading...</div>
+                <div className="flex items-center justify-center min-h-[200px] w-full">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+              </div>
             ) : books?.length > 0 ? (
 
                 // books info section 

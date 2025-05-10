@@ -13,6 +13,10 @@ export const BookProvider = ({ children }) => {
 
   const queryClient = useQueryClient();
 
+  const [cartItems, setCartItems] = useState([]);
+
+  const [cartNumber, setCartNumber] = useState(0);
+
 
 
 
@@ -38,6 +42,33 @@ export const BookProvider = ({ children }) => {
     totalPages: 1,
     totalBooks: 0
   });
+
+  const addToCart = (book) => {
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find(item => item._id === book._id);
+  
+      if (existingItem) {
+        return prevItems.map(item =>
+          item._id === book._id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+  
+      return [...prevItems, { ...book, quantity: 1 }];
+    });
+  
+    setCartNumber(prev => prev + 1);
+  };
+  
+
+  const removeFromCart = (id) => {
+    setCartItems((prevItems) => prevItems.filter(item => item._id !== id));
+    setCartNumber(prev => Math.max(0, prev - 1));
+  };
+  
+
+
  // Fetch books query
   const fetchBooksQuery = useQuery({
     queryKey: ["books", filters], // Unique key based on filters
@@ -98,7 +129,14 @@ export const BookProvider = ({ children }) => {
     // fetchSingleBook,
     updateFilters,
     filters,
+
+    cartItems,
+    cartNumber,
+    addToCart,
+    removeFromCart,
   };
+
+  console.log(cartNumber);
 
   return (
     <BookContext.Provider value={value}>
