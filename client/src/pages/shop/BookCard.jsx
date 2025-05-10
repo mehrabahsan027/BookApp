@@ -28,7 +28,7 @@ export default function BookCard({book}) {
     
     {/* Book Details */}
     <div className="space-y-2 p-4">
-      <Link to={`${book.bookUrl}`}><h3 className="text-lg font-medium text-gray-900">
+      <Link to={`${book.bookUrl}`} target='_blank'><h3 className="text-lg font-medium text-gray-900">
         {book.title}
       </h3></Link>
       
