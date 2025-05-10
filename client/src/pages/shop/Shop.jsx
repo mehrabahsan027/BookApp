@@ -65,9 +65,10 @@ export default function Shop() {
 
 
     return (
-        <section className='bg-gray-100 mx-auto min-h-screen flex justify-center items-start'>
+        <section className='bg-gray-100   min-h-screen flex justify-center items-start w-full'>
 
             {loading ? (
+               
                 <div className="flex items-center justify-center min-h-[200px] w-full">
                 <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
               </div>
@@ -77,7 +78,7 @@ export default function Shop() {
                 <div className=' mt-4'>
 
                     {/* filtering section with category and sort */}
-                    <div className='flex justify-between border-b border-gray-200 items-center pb-2 '>
+                    <div className='flex flex-col md:flex-row justify-center sm:justify-between border-b border-gray-200 items-center pb-2 '>
 
                         <BooksCategory
                             categories={categories}
@@ -108,7 +109,7 @@ export default function Shop() {
                     <Summary pagination={pagination} filters={filters} />
 
                     {/* books grid */}
-                    <div className='container mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
+                    <div className="w-full   max-w-screen-xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
 
 
