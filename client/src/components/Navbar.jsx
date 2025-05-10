@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router';
 import { FaShoppingCart } from 'react-icons/fa';
 import { HiMenu, HiX } from 'react-icons/hi';
+import { useBooks } from '../context/BookContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const { cartNumber } = useBooks();
+
   const navLinks = [
     { to: '/', label: 'Home' },
     { to: '/books', label: 'Books' },
-    { to: '/ebooks', label: 'Ebooks' },
+  
     { to: '/membership', label: 'Membership' },
-    { to: '/add-book', label: 'Add Book' },
+    { to: '/add-book', label: 'Request Book' },
   ];
 
   return (
@@ -41,12 +44,14 @@ const Navbar = () => {
           </div>
 
           {/* Right Side Icons */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center relative space-x-4">
             {/* Cart Icon */}
             <NavLink 
               to="/cart" 
-              className="bg-red-900 text-white p-2 rounded-full hover:bg-gray-800 transition-colors"
+              className="bg-red-900 text-white p-2 rounded-full hover:bg-red-800 transition-colors"
             >
+              
+              <div className='absolute -top-3   text-xl bg-white text-red-900 font-semibold rounded-full'>{cartNumber}</div>
               <FaShoppingCart className="h-5 w-5 text-yellow-50" />
             </NavLink>
 

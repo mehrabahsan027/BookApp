@@ -1,16 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router'
+import { useBooks } from '../../context/BookContext';
 
 export default function BookCard({book}) {
+  const { addToCart } = useBooks();
 
   return (
-    <div className="group shadow-md rounded-lg">
+    <div className="group shadow-md rounded-lg w-full max-w-xs mx-auto">
     {/* Book Image */}
     <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-green-50 p-8 relative group">
       <img
         src={book.imageUrl || '/placeholder-book.jpg'}
         alt={book.title}
-        className="w-full object-cover group-hover:scale-110 transition-transform duration-300"
+        className="w-full mx-auto  object-cover group-hover:scale-110 transition-transform duration-300"
       />
       <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <Link to={`${book.bookUrl}`} target='_blank' className="bg-red-700 text-white py-2 px-4 rounded cursor-pointer font-medium">
@@ -34,8 +36,8 @@ export default function BookCard({book}) {
         <div className="flex space-x-2">
         
           <button 
-            onClick={() => onDelete(book._id)}
-            className="text-white bg-amber-700 hover:bg-amber-800 px-4 py-2 rounded-lg transition duration-300 ease-in-out"
+            onClick={() => addToCart(book)}
+            className="text-white bg-amber-700 hover:bg-amber-800 px-4 py-2 rounded-lg transition duration-300 ease-in-out cursor-pointer"
           >
             Add to Cart
           </button>

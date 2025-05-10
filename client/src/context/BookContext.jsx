@@ -11,9 +11,10 @@ export const BookContext = createContext()
 
 export const BookProvider = ({ children }) => {
 
-  const queryClient = useQueryClient();
-
-
+  const [books, setBooks] = useState([])
+  const [curentBook, setCurrentBook] = useState(null)
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
 
 
@@ -38,36 +39,73 @@ export const BookProvider = ({ children }) => {
     totalPages: 1,
     totalBooks: 0
   });
- // Fetch books query
-  const fetchBooksQuery = useQuery({
-    queryKey: ["books", filters], // Unique key based on filters
-    queryFn: async () => {
-      const params = new URLSearchParams();
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value) {
-          params.append(key, value);
-        }
-      });
 
-      const response = await fetch(`${baseUrl}/books?${params}`);
-      if (!response.ok) throw new Error("Failed to fetch books");
-      const data = await response.json();
+  const fetchBooks = useCallback(
+    async () => {
+      setLoading(true)
+      try {
 
-      setPagination({
-        currentPage: data.currentPage,
-        totalPages: data.totalPages,
-        totalBooks: data.totalBooks,
-      });
+        setError(null)
 
-      return data.books;
-    },
-    keepPreviousData: true,
-    
-  });
+        const params = new URLSearchParams()
+
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value) {
+            params.append(key, value)
+          }
+        })
+
+        console.log(params);
 
 
-  
 
+
+        const response = await fetch(`${baseUrl}/books?${params}`)
+        const data = await response.json()
+        console.log(data);
+
+        setBooks(data?.books)
+
+        setPagination({
+          currentPage: data.currentPage,
+          totalPages: data.totalPages,
+          totalBooks: data.totalBooks
+        });
+
+        console.log(pagination);
+
+
+
+      } catch (error) {
+        setError(error?.message)
+      } finally {
+        setLoading(false)
+      }
+    }, [filters]
+
+  )
+
+
+
+  const fetchSingleBook = useCallback(async (id) => {
+    setLoading(true)
+    try {
+      setError(null)
+      const response = await fetch(`http://localhost:3000/books/${id}`)
+      const data = await response.json()
+      setCurrentBook(data?.book)
+      return data?.book
+    } catch (error) {
+      setError(error?.message)
+      throw new Error(error?.message)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  const clearCurrentBook = useCallback(() => {
+    setCurrentBook(null);
+  }, []);
 
   const updateFilters = useCallback((newFilters) => {
     setFilters(prev => ({
@@ -89,17 +127,8 @@ export const BookProvider = ({ children }) => {
 
 
   const value = {
-    books: fetchBooksQuery.data || [],
-    // curentBook: queryClient.getQueryData(["book"]) || null,
-    error: fetchBooksQuery.error?.message || null,
-    loading: fetchBooksQuery.isLoading,
-    pagination,
-    fetchBooks: fetchBooksQuery.refetch,
-   
-    // fetchSingleBook,
-    updateFilters,
-    filters,
-  };
+    books, curentBook, error, loading, pagination, fetchBooks, clearCurrentBook, fetchSingleBook, updateFilters, filters
+  }
 
   return (
     <BookContext.Provider value={value}>
@@ -115,10 +144,3 @@ export const useBooks = () => {
   }
   return context
 }
-
-// Export QueryClientProvider wrapper for the app
-export const AppWrapper = ({ children }) => (
-  <QueryClientProvider client={queryClient}>
-    <BookProvider>{children}</BookProvider>
-  </QueryClientProvider>
-);

@@ -2,9 +2,9 @@ import React from 'react'
 
 export default function BooksCategory({ categories, activeCategory, onCategoryChange }) {
   return (
-    <div className="">
+
       <div className=" px-4 py-4">
-        <nav className="flex items-center flex-wrap space-x-8 overflow-x-auto scrollbar-hide">
+        <nav className="flex  items-center flex-wrap space-x-8 overflow-x-auto scrollbar-hide">
           {categories.map((category) => (
             <button
               key={category}
@@ -20,6 +20,6 @@ export default function BooksCategory({ categories, activeCategory, onCategoryCh
           ))}
         </nav>
       </div>
-    </div>
+   
   )
 }

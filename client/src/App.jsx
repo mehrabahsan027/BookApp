@@ -8,6 +8,7 @@ export default function App() {
     <>
 
 <AppWrapper>
+<<<<<<< HEAD
 <BookProvider>
 
 <Navbar />
@@ -18,11 +19,27 @@ export default function App() {
 
 <footer>footer</footer>
 
+=======
+
+<BookProvider>
+
+<Navbar />
+
+<main className='min-h-[calc(100vh-100px)] mt-16 roboto'>
+  <Outlet />
+</main>
+
+<footer>footer</footer>
+
+>>>>>>> feature-x
 </BookProvider>
 
 </AppWrapper>
      
 
+  
+  </AppWrapper> 
+      
 
     </>
   )
