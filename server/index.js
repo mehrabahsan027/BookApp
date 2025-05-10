@@ -6,7 +6,9 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 3001
 
 
-app.use(cors());
+app.use(cors( {
+  origin: [ "http://localhost:3000","https://book-app-01.netlify.app"]
+}));
 app.use(express.json());
 
 
