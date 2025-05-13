@@ -2,8 +2,24 @@ import React from 'react'
 import { Link } from 'react-router'
 import { useBooks } from '../../context/BookContext';
 
+
 export default function BookCard({book}) {
   const { addToCart } = useBooks();
+
+  const [cartText, setCartText] = React.useState('Add to Cart');
+
+
+  const handleAddToCart = (book) => {
+    addToCart(book);
+    
+    setCartText('Added to Cart');
+    setTimeout(() => {
+      
+      setCartText('Add to Cart');
+    }, 2000);
+  };
+
+
 
   return (
     <div className="group shadow-md rounded-lg w-full max-w-xs mx-auto">
@@ -42,10 +58,10 @@ export default function BookCard({book}) {
         <div className="flex space-x-2">
         
           <button 
-            onClick={() => addToCart(book)}
+            onClick={() => handleAddToCart(book)}
             className="text-white bg-amber-700 hover:bg-amber-800 px-4 py-2 rounded-lg transition duration-300 ease-in-out cursor-pointer"
           >
-            Add to Cart
+            {cartText}
           </button>
         </div>
       </div>
