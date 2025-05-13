@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { baseUrl } from './../utils/baseUrl';
+
 import { useQuery, useQueryClient, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { baseUrl } from './../utils/baseUrl';
 
 
 // Create QueryClient
@@ -43,60 +44,81 @@ export const BookProvider = ({ children }) => {
     totalBooks: 0
   });
 
-  const addToCart = (book) => {
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find(item => item._id === book._id);
-  
-      if (existingItem) {
-        return prevItems.map(item =>
-          item._id === book._id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-  
-      return [...prevItems, { ...book, quantity: 1 }];
-    });
-  
-    setCartNumber(prev => prev + 1);
-  };
+ 
   
 
   const removeFromCart = (id) => {
     setCartItems((prevItems) => prevItems.filter(item => item._id !== id));
-    setCartNumber(prev => Math.max(0, prev - 1));
+    setCartNumber(cartItems ? cartItems.length -1 : 0);
+    console.log(cartItems);
+    
   };
   
 
 
  // Fetch books query
-  const fetchBooksQuery = useQuery({
-    queryKey: ["books", filters], // Unique key based on filters
-    queryFn: async () => {
-      const params = new URLSearchParams();
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value) {
-          params.append(key, value);
-        }
+ const fetchBooksQuery = useQuery({
+  queryKey: ['books', filters],
+  queryFn: async () => {
+    const params = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== '' && value !== null && value !== undefined) {
+        params.append(key, value);
+      }
+    });
+
+    try {
+      console.log(baseUrl);
+      
+      const response = await fetch(`${baseUrl}/books?${params}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
-      const response = await fetch(`${baseUrl}/books?${params}`);
-      if (!response.ok) throw new Error("Failed to fetch books");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+      }
+
       const data = await response.json();
 
       setPagination({
-        currentPage: data.currentPage,
-        totalPages: data.totalPages,
-        totalBooks: data.totalBooks,
+        currentPage: data.currentPage || 1,
+        totalPages: data.totalPages || 1,
+        totalBooks: data.totalBooks || 0,
       });
 
-      return data.books;
-    },
-    keepPreviousData: true, // Keep previous data while fetching new (for pagination)
+      return data.books || [];
+    } catch (error) {
+      console.error('Fetch books error:', error);
+      throw error;
+    }
+  },
+  keepPreviousData: true,
+  retry: 2, // Retry failed requests up to 2 times
+  staleTime: 1000 * 60, // Data stays fresh for 1 minute
+});
+
+
+const addToCart = (book) => {
+  setCartItems((prevItems) => {
+    const existingItem = prevItems?.find(item => item._id === book._id);
+
+    if (existingItem) {
+      return prevItems.map(item =>
+        item._id === book._id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+    }
+
+    return [...prevItems, { ...book, quantity: 1 }];
   });
 
-
-  
+  setCartNumber(prev => prev + 1);
+};
 
 
   const updateFilters = useCallback((newFilters) => {
