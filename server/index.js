@@ -6,8 +6,8 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 3001
 
 
-app.use(cors( {
-  origin: [ "http://localhost:5173","https://book-app-client-pied.vercel.app"]
+app.use(cors({
+  origin: ["http://localhost:5173", "https://book-app-client-pied.vercel.app"]
 }))
 app.use(express.json());
 
@@ -40,6 +40,49 @@ async function run() {
     const database = client.db("book-management");
     const booksCollection = database.collection("books");
 
+    const requestBooksCollection = database.collection("requestBooks");
+
+    const usersCollection = database.collection("users");
+
+
+    // users collection
+    //add user (POST)
+    app.post('/users', async (req, res) => {
+      const userData = req.body;
+
+      try {
+        const { email } = userData;
+
+        // Check if user already exists
+        const existingUser = await usersCollection.findOne({ email: email })
+
+
+        if (existingUser) {
+          return res.status(400).json({
+            error: "User Already exists"
+          });
+
+
+
+        }
+
+         // If no duplicate, insert the new book
+         const result = await usersCollection.insertOne(userData);
+         res.status(201).json({
+           message: "User Created Successfully",
+           result
+         });
+
+
+      } catch (error) {
+
+
+        res.status(500).json({ error: error.message });
+
+      }
+
+    })
+
     //add data to the collection
 
     //add books (POST)
@@ -47,7 +90,7 @@ async function run() {
       const bookData = req.body;
 
       try {
-        const { title, author } = bookData;
+        const { title, author, yourEmail } = bookData;
 
         // Check if book already exists
         const existingBook = await booksCollection.findOne({
@@ -62,11 +105,13 @@ async function run() {
         }
 
         // If no duplicate, insert the new book
-        const result = await booksCollection.insertOne(bookData);
+        const result = await requestBooksCollection.insertOne(bookData);
         res.status(201).json({
-          message: "Book added successfully",
+          message: "Request Successful",
           result
         });
+
+
 
 
       } catch (error) {
@@ -128,29 +173,29 @@ async function run() {
           if (maxPrice) filter.price.$lte = parseFloat(maxPrice);
         }
 
-      
+
 
         // Sort options
         const sortOptions = { [sortBy || 'title']: order === 'desc' ? -1 : 1 };
 
-      // Execute queries in parallel for better performance
-      const [books, totalBooks] = await Promise.all([
-        booksCollection
-          .find(filter)
-          .sort(sortOptions)
-          .skip(skip)
-          .limit(perBooks)
-          .toArray(),
-        booksCollection.countDocuments(filter)
-      ])
+        // Execute queries in parallel for better performance
+        const [books, totalBooks] = await Promise.all([
+          booksCollection
+            .find(filter)
+            .sort(sortOptions)
+            .skip(skip)
+            .limit(perBooks)
+            .toArray(),
+          booksCollection.countDocuments(filter)
+        ])
 
 
-      res.json({
-        books,
-        totalBooks,
-        currentPage,
-        totalPages: Math.ceil(totalBooks / perBooks),
-      });
+        res.json({
+          books,
+          totalBooks,
+          currentPage,
+          totalPages: Math.ceil(totalBooks / perBooks),
+        });
 
       } catch (error) {
         res.status(500).json({ error: error.message });
@@ -158,60 +203,62 @@ async function run() {
       }
     })
 
-//get a single book (GET)
+    //get a single book (GET)
 
-app.get('/books/:id', async (req, res) => {
-  const { id } = req.params
-
- 
-  try {
-    const book = await booksCollection.findOne({ _id: new ObjectId(id) });
-
-    // Validate ObjectId format
-  if (!ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'Invalid book ID format' });
-  }
-   
-    
-    if (!book) {
-      return res.status(404).json({ error: "Book not found" });
-    }
-    res.json({status: true, book });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+    app.get('/books/:id', async (req, res) => {
+      const { id } = req.params
 
 
-})
+      try {
+        const book = await booksCollection.findOne({ _id: new ObjectId(id) });
 
-//update a book (PUT)
-
-app.put('/books/:id', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    const updateBook = await booksCollection.updateOne(
-      { _id: new ObjectId(id) },
-      { $set: req.body })
-    
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-
-})
+        // Validate ObjectId format
+        if (!ObjectId.isValid(id)) {
+          return res.status(400).json({ error: 'Invalid book ID format' });
+        }
 
 
-  // 📌 Delete Book (DELETE)
-  app.delete("/books/:id", async (req, res) => {
-    try {
-      await booksCollection.deleteOne({
-        _id: new ObjectId(req.params.id),
-      });
-      res.json({ message: "Book deleted" });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  }); 
+        if (!book) {
+          return res.status(404).json({ error: "Book not found" });
+        }
+        res.json({ status: true, book });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+
+
+    })
+
+    //update a book (PUT)
+
+    app.put('/books/:id', async (req, res) => {
+      const { id } = req.params
+
+      try {
+        const updateBook = await booksCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: req.body })
+
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+
+    })
+
+
+    // 📌 Delete Book (DELETE)
+    app.delete("/books/:id", async (req, res) => {
+      try {
+        await booksCollection.deleteOne({
+          _id: new ObjectId(req.params.id),
+        });
+        res.json({ message: "Book deleted" });
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
+    });
+
+
 
 
 

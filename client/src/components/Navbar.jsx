@@ -4,21 +4,25 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { useBooks } from '../context/BookContext';
 
+
+ export const navLinks = [
+  { to: '/', label: 'Home' },
+  { to: '/books', label: 'Books' },
+
+  { to: '/membership', label: 'Membership' },
+  { to: '/add-book', label: 'Request Book' },
+];
+
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { cartNumber } = useBooks();
 
-  const navLinks = [
-    { to: '/', label: 'Home' },
-    { to: '/books', label: 'Books' },
-  
-    { to: '/membership', label: 'Membership' },
-    { to: '/add-book', label: 'Request Book' },
-  ];
+
 
   return (
-    <nav className="bg-white fixed w-full top-0 z-50 py-4">
+    <nav className="bg-white fixed w-full top-0 z-50 py-4 shadow-xs "> 
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
