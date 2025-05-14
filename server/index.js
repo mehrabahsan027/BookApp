@@ -85,12 +85,12 @@ async function run() {
 
     //add data to the collection
 
-    //add books (POST)
+    //add books (POST) ---  request book
     app.post('/add-book', async (req, res) => {
       const bookData = req.body;
 
       try {
-        const { title, author, yourEmail } = bookData;
+        const { title, author } = bookData;
 
         // Check if book already exists
         const existingBook = await booksCollection.findOne({
@@ -100,7 +100,7 @@ async function run() {
 
         if (existingBook) {
           return res.status(400).json({
-            error: "Book already exists (same title and author)"
+            error: "Book already exists  (same title and author)"
           });
         }
 

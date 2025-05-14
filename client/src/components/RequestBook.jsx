@@ -5,11 +5,14 @@ export default function RequestBook() {
   const [reqBook, setReqBook] = React.useState({
     title: '',
     author: '',
-    yourEmail: ''
+    yourEmail: '',
+    date: new Date(),
   });
 
   const [errors, setErrors] = React.useState({});
   const [submitted, setSubmitted] = React.useState(false);
+
+  const [error, setError] = React.useState('');
 
   // Email regex for basic validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,30 +37,35 @@ export default function RequestBook() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
+  
     if (Object.keys(validationErrors).length === 0) {
-      
-        const response = axios.post('http://localhost:3000/add-book', reqBook)
-        .then((response) => {
-          console.log(response.data);
-        }).catch((error) => {
-          console.error('Error:', error);
-        })
- 
-      setSubmitted(true);
+      try {
+        const response = await axios.post('http://localhost:3000/add-book', reqBook);
+        console.log(response.status);
+        setSubmitted(true);
+  
+        // Reset form
+        setReqBook({ title: '', author: '', yourEmail: '' });
+  
+        setTimeout(() => {
+          setSubmitted(false);
+        }, 2000);
+      } catch (error) {
+        console.error('Error:', error.response.status);
+        if (error.response.status === 400) {
+          setError('Book already exists or somnething went wrong');
+        }
 
-      setTimeout(()=> {
-        setSubmitted(false);
-      },2000)
-      // Reset form
-      setReqBook({ title: '', author: '', yourEmail: '' });
+      }
     } else {
       setSubmitted(false);
     }
   };
+  
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-purple-100 p-4">
@@ -130,6 +138,9 @@ export default function RequestBook() {
             Submit Request
           </button>
         </form>
+
+{error && <p className='text-red-800 mt-3 text-center'>{error}</p>}
+        
       </div>
     </section>
   );

@@ -6,9 +6,12 @@ export default function Membership() {
     name: '',
     email: '',
     phone: '',
+
   });
 
   const [submitted, setSubmitted] = useState(false);
+
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +40,9 @@ export default function Membership() {
  
     } catch (error) {
       console.error('Error:', error);
+      if (error.response.status === 400) {
+        setError('User Already Exists');
+      }
     }
     
 
@@ -97,7 +103,7 @@ export default function Membership() {
               Phone
             </label>
             <input
-              type="tel"
+              type="number"
               id="phone"
               name="phone"
               value={user.phone}
@@ -116,7 +122,7 @@ export default function Membership() {
           </button>
         </form>
         {submitted &&  <p className='text-green-800 mt-3 text-center'>Submitted...</p>}
-       
+        {error && <p className='text-red-800 mt-3 text-center'>{error}</p>}
       </div>
     </section>
   );
