@@ -22,9 +22,9 @@ export default function BookCard({book}) {
 
 
   return (
-    <div className="group shadow-md rounded-lg w-full max-w-xs mx-auto">
+    <div className="bg-gradient-to-t from-yellow-50 to-red-100   group shadow-lg rounded-lg w-full max-w-xs mx-auto ">
     {/* Book Image */}
-    <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-green-50 p-8 relative group">
+    <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-transparent p-8 relative group">
       <Link to={`${book?.bookUrl}`} target='_blank'>
       <img
         

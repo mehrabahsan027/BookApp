@@ -65,7 +65,7 @@ export default function Shop() {
 
 
     return (
-        <section className='bg-gradient-to-r from-blue-50 to-purple-50  min-h-screen flex justify-center items-start w-full'>
+        <section className='bg-gradient-to-r from-green-50 to-red-50  min-h-screen flex justify-center items-start w-full'>
 
             {loading ? (
                
