@@ -13,8 +13,9 @@ export default function App() {
     <main className='min-h-[calc(100vh-100px)] mt-16 roboto'>
       <Outlet />
     </main>
-    <footer>footer</footer>
-  </BookProvider>
+
+<footer className='text-center py-3 bg-gray-100 '>Copyright © 2025 BookBond</footer>
+  </BookProvider> 
 </AppWrapper>
      
 

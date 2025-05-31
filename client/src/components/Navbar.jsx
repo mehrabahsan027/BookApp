@@ -16,7 +16,7 @@ const Navbar = () => {
   const { cartNumber } = useBooks();
 
   return (
-    <nav className="bg-white fixed w-full top-0 z-50 py-4 shadow-xs">
+    <nav className="bg-gradient-to-t from-yellow-50 to-red-100  fixed w-full top-0 z-50 py-4 shadow-xs backdrop-blur-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
