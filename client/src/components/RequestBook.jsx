@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { baseUrl } from '../utils/baseUrl';
 
 export default function RequestBook() {
   const [reqBook, setReqBook] = React.useState({
@@ -43,7 +44,7 @@ export default function RequestBook() {
 
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await axios.post('http://localhost:3000/add-book', reqBook);
+        const response = await axios.post(`${baseUrl}/add-book`, reqBook);
         console.log(response.status);
         setSubmitted(true);
 
