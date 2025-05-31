@@ -205,58 +205,58 @@ async function run() {
 
     //get a single book (GET)
 
-    app.get('/books/:id', async (req, res) => {
-      const { id } = req.params
+    // app.get('/books/:id', async (req, res) => {
+    //   const { id } = req.params
 
 
-      try {
-        const book = await booksCollection.findOne({ _id: new ObjectId(id) });
+    //   try {
+    //     const book = await booksCollection.findOne({ _id: new ObjectId(id) });
 
-        // Validate ObjectId format
-        if (!ObjectId.isValid(id)) {
-          return res.status(400).json({ error: 'Invalid book ID format' });
-        }
-
-
-        if (!book) {
-          return res.status(404).json({ error: "Book not found" });
-        }
-        res.json({ status: true, book });
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
+    //     // Validate ObjectId format
+    //     if (!ObjectId.isValid(id)) {
+    //       return res.status(400).json({ error: 'Invalid book ID format' });
+    //     }
 
 
-    })
+    //     if (!book) {
+    //       return res.status(404).json({ error: "Book not found" });
+    //     }
+    //     res.json({ status: true, book });
+    //   } catch (error) {
+    //     res.status(500).json({ error: error.message });
+    //   }
+
+
+    // })
 
     //update a book (PUT)
 
-    app.put('/books/:id', async (req, res) => {
-      const { id } = req.params
+    // app.put('/books/:id', async (req, res) => {
+    //   const { id } = req.params
 
-      try {
-        const updateBook = await booksCollection.updateOne(
-          { _id: new ObjectId(id) },
-          { $set: req.body })
+    //   try {
+    //     const updateBook = await booksCollection.updateOne(
+    //       { _id: new ObjectId(id) },
+    //       { $set: req.body })
 
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
+    //   } catch (error) {
+    //     res.status(500).json({ error: error.message });
+    //   }
 
-    })
+    // })
 
 
     // 📌 Delete Book (DELETE)
-    app.delete("/books/:id", async (req, res) => {
-      try {
-        await booksCollection.deleteOne({
-          _id: new ObjectId(req.params.id),
-        });
-        res.json({ message: "Book deleted" });
-      } catch (err) {
-        res.status(500).json({ error: err.message });
-      }
-    });
+    // app.delete("/books/:id", async (req, res) => {
+    //   try {
+    //     await booksCollection.deleteOne({
+    //       _id: new ObjectId(req.params.id),
+    //     });
+    //     res.json({ message: "Book deleted" });
+    //   } catch (err) {
+    //     res.status(500).json({ error: err.message });
+    //   }
+    // });
 
 
 
