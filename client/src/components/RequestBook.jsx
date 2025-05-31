@@ -33,7 +33,7 @@ export default function RequestBook() {
     const { name, value } = e.target;
     setReqBook((prev) => ({
       ...prev,
-      [	options]: value,
+      [	name]: value,
     }));
   };
 
