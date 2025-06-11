@@ -83,9 +83,11 @@ export const BookProvider = ({ children }) => {
       }
 
       const data = await response.json();
+      console.log('data', data);
+      
 
       setPagination({
-        currentPage: data.currentPage || 1,
+        currentPage: data.currentPage ,
         totalPages: data.totalPages || 1,
         totalBooks: data.totalBooks || 0,
       });
@@ -96,9 +98,9 @@ export const BookProvider = ({ children }) => {
       throw error;
     }
   },
-  keepPreviousData: true,
-  retry: 2, // Retry failed requests up to 2 times
-  staleTime: 1000 * 60, // Data stays fresh for 1 minute
+  // keepPreviousData: true,
+  // retry: 2, 
+  // staleTime: 1000 * 60, 
 });
 
 

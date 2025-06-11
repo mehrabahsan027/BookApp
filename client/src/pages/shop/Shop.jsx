@@ -57,7 +57,8 @@ export default function Shop() {
 
     const handlePageChange = (newPage) => {
         updateFilters({ page: newPage });
-        // window.scrollTo({ top: '50%', behavior: 'smooth' });
+
+  
       };
 
 
