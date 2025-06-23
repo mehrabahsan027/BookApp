@@ -31,3 +31,8 @@
       hsl(143deg 60% 12%) 100%
     );
   }
+
+
+  button {
+    cursor: pointer;
+  }

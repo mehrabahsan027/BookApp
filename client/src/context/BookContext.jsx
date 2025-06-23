@@ -98,8 +98,8 @@ export const BookProvider = ({ children }) => {
       throw error;
     }
   },
-  // keepPreviousData: true,
-  // retry: 2, 
+  keepPreviousData: true,
+  retry: 2, 
   // staleTime: 1000 * 60, 
 });
 

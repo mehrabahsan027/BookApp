@@ -12,8 +12,7 @@ import Pagination from './Pagination';
 export default function Shop() {
     const { books,
         loading,
-        error,
-        fetchBooks,
+      
         filters,
         pagination,
         updateFilters } = useBooks()
@@ -62,18 +61,25 @@ export default function Shop() {
       };
 
 
+    let loader ;
 
+    if (loading) {
+        loader = (
+          <div className="flex items-center justify-center min-h-[200px] w-full">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+              </div>
+        );
 
+        
+    }
 
     return (
         <section className='bg-gradient-to-r from-green-50 to-red-50  min-h-screen flex justify-center items-start w-full'>
 
-            {loading ? (
-               
-                <div className="flex items-center justify-center min-h-[200px] w-full">
-                <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
-              </div>
-            ) : books?.length > 0 ? (
+            {loader &&  loader}
+
+
+             {!loader && books && books?.length > 0 && (
 
                 // books info section 
                 <div className=' mt-4'>
@@ -133,7 +139,9 @@ export default function Shop() {
                 </div>
 
 
-            ) : (
+            )} 
+
+            {!loader && books && books?.length === 0 &&  (
                 <div>
                     <h1 className="text-2xl font-bold text-gray-700 mt-8 mb-3">No books found</h1>
 
@@ -142,6 +150,8 @@ export default function Shop() {
                 </div>
 
             )}
+            
+             
 
 
         </section>
