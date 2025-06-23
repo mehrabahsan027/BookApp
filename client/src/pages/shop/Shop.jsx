@@ -63,7 +63,7 @@ export default function Shop() {
 
     let loader ;
 
-    if (loading) {
+    if (loading && books.length === 0) {
         loader = (
           <div className="flex items-center justify-center min-h-[200px] w-full">
                 <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
@@ -121,7 +121,7 @@ export default function Shop() {
 
 
 
-                        {books.map((book) => (
+                        {books?.map((book) => (
 
                             <BookCard key={book._id} book={book} />
                         ))}
@@ -141,7 +141,7 @@ export default function Shop() {
 
             )} 
 
-            {!loader && books && books?.length === 0 &&  (
+            {!loader && books?.length === 0 &&   (
                 <div>
                     <h1 className="text-2xl font-bold text-gray-700 mt-8 mb-3">No books found</h1>
 
