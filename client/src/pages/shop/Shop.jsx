@@ -1,8 +1,7 @@
-import React, {  Suspense, lazy } from "react";
+import React, { Suspense, lazy } from "react";
 import { useBooks } from "../../context/BookContext";
 
 const BookCard = lazy(() => import("./BookCard"));
-
 
 import Summary from "./Summary";
 import BooksCategory from "./BooksCategory";
@@ -61,66 +60,58 @@ export default function Shop() {
     updateFilters({ page: newPage });
   };
 
-
-
- 
   return (
     <section className="bg-gradient-to-r from-green-50 to-red-50  min-h-screen flex justify-center items-start w-full">
+      <div className=" mt-4">
+        {/* filtering section with category and sort */}
+        <div className="flex flex-col md:flex-row justify-center sm:justify-between border-b border-gray-200 items-center pb-2 ">
+          <BooksCategory
+            categories={categories}
+            activeCategory={filters.genre || "All Collections"}
+            onCategoryChange={handleCategoryChange}
+          />
 
-    
-        <div className=" mt-4">
-          {/* filtering section with category and sort */}
-          <div className="flex flex-col md:flex-row justify-center sm:justify-between border-b border-gray-200 items-center pb-2 ">
-            <BooksCategory
-              categories={categories}
-              activeCategory={filters.genre || "All Collections"}
-              onCategoryChange={handleCategoryChange}
-            />
-
-            {/* clear search */}
-            <div onClick={() => handleClearFilters()}>
-              <button className="px-4 py-2 bg-red-700 cursor-pointer text-white rounded-xl">
-                Clear Search
-              </button>
-            </div>
-
-            {/* Add sorting controls */}
-            <div className="py-4 flex justify-end  px-4">
-              <SortBooks
-                currentSort={{
-                  sortBy: filters.sortBy,
-                  order: filters.order,
-                }}
-                onSortChange={handleSortChange}
-              />
-            </div>
+          {/* clear search */}
+          <div onClick={() => handleClearFilters()}>
+            <button className="px-4 py-2 bg-red-700 cursor-pointer text-white rounded-xl">
+              Clear Search
+            </button>
           </div>
 
-          {/* result summary */}
-          <Summary pagination={pagination} filters={filters} />
+          {/* Add sorting controls */}
+          <div className="py-4 flex justify-end  px-4">
+            <SortBooks
+              currentSort={{
+                sortBy: filters.sortBy,
+                order: filters.order,
+              }}
+              onSortChange={handleSortChange}
+            />
+          </div>
+        </div>
 
-          {/* books grid */}
+        {/* result summary */}
+        <Summary pagination={pagination} filters={filters} />
+
+        {/* books grid */}
+
+        <div className="w-full   max-w-screen-xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <Suspense fallback={<BooksLoading />}>
-          <div className="w-full   max-w-screen-xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {books?.map((book) => (
               <BookCard key={book._id} book={book} />
             ))}
-          </div>
           </Suspense>
-        
-
-          {/* pagination */}
-          {!loading && books?.length > 0 && pagination.totalPages > 1 && (
-            <Pagination
-              currentPage={pagination.currentPage}
-              totalPages={pagination.totalPages}
-              onPageChange={handlePageChange}
-            />
-          )}
         </div>
 
-
-     
+        {/* pagination */}
+        {!loading && books?.length > 0 && pagination.totalPages > 1 && (
+          <Pagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </div>
     </section>
   );
 }
