@@ -1,13 +1,12 @@
 import React, { Suspense, lazy } from "react";
 import { useBooks } from "../../context/BookContext";
 
-const BookCard = lazy(() => import("./BookCard"));
-
 import Summary from "./Summary";
 import BooksCategory from "./BooksCategory";
 import SortBooks from "./SortBooks";
 import Pagination from "./Pagination";
 import BooksLoading from "./BooksLoading";
+import BookCard from "./BookCard";
 
 export default function Shop() {
   const {
@@ -95,13 +94,14 @@ export default function Shop() {
 
         {/* books grid */}
 
-        <div className="w-full   max-w-screen-xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <Suspense fallback={<BooksLoading />}>
-            {books?.map((book) => (
-              <BookCard key={book._id} book={book} />
-            ))}
-          </Suspense>
-        </div>
+        {books.length > 0 ? (
+          <div className="w-full   max-w-screen-xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {books.length > 0 &&
+              books?.map((book) => <BookCard key={book._id} book={book} />)}
+          </div>
+        ) : (
+          <BooksLoading />
+        )}
 
         {/* pagination */}
         {!loading && books?.length > 0 && pagination.totalPages > 1 && (
