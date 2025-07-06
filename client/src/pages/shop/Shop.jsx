@@ -1,7 +1,9 @@
-import React, { useEffect, Suspense } from "react";
+import React, {  Suspense, lazy } from "react";
 import { useBooks } from "../../context/BookContext";
 
-import BookCard from "./BookCard";
+const BookCard = lazy(() => import("./BookCard"));
+
+
 import Summary from "./Summary";
 import BooksCategory from "./BooksCategory";
 import SortBooks from "./SortBooks";
@@ -108,7 +110,7 @@ export default function Shop() {
         
 
           {/* pagination */}
-          {pagination.totalPages > 1 && (
+          {!loading && books?.length > 0 && pagination.totalPages > 1 && (
             <Pagination
               currentPage={pagination.currentPage}
               totalPages={pagination.totalPages}
