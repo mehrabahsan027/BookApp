@@ -94,14 +94,13 @@ export default function Shop() {
 
         {/* books grid */}
 
-        { !loading && books && books?.length > 0 ? (
+        { !loading && books && books?.length > 0 && (
           <div className="w-full   max-w-screen-xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {
               books.map((book) => <BookCard key={book._id} book={book} />)}
           </div>
-        ) : (
-          <BooksLoading />
         )}
+        {loading && <BooksLoading />}
 
         {/* pagination */}
         {!loading && books?.length > 0 && pagination.totalPages > 1 && (
