@@ -99,8 +99,8 @@ export const BookProvider = ({ children }) => {
     }
   },
   keepPreviousData: true,
-  retry: 2, 
-  // staleTime: 1000 * 60, 
+  retry: 2, // Retry failed requests up to 2 times
+  staleTime: 1000 * 60, // Data stays fresh for 1 minute
 });
 
 
